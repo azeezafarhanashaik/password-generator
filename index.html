@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: #1e1e1e;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            color: rgb(231, 231, 244);
+        }
+
+        .container {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 3px solid cyan;
+            box-shadow: 0 0 10px gold;
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 80%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 2px solid blue;
+            background-color: white;
+            color: black;
+            border-radius: 5px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin: 8px auto;
+            width: 80%;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-donate {
+            cursor: pointer;
+            padding: 0.7em 1.2em;
+            min-width: 120px;
+            font-size: 1rem;
+            font-weight: 500;
+            background: linear-gradient(325deg, hsla(217 100% 56% / 1) 0%, hsla(194 100% 69% / 1) 55%, hsla(217 100% 56% / 1) 90%);
+            border: none;
+            border-radius: 0.5em;
+            color: white;
+            box-shadow: 0px 0px 20px rgba(71, 184, 255, 0.5);
+        }
+
+        .btn-donate:hover {
+            background-position: right top;
+        }
+        @keyframes blink-shadow {
+    0% { text-shadow: 0 0 10px cyan; }
+    50% { text-shadow: 0 0 20px cyan, 0 0 30px blue; }
+    100% { text-shadow: 0 0 10px cyan; }
+}
+
+.header h1 {
+    animation: blink-shadow 1.5s infinite alternate;
+}
+
+
+        .footer {
+            background: #1e1e1e;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+            color: rgb(55, 59, 171);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Password Generator</h1>
+    </div>
+    
+    <div class="container">
+        <h2>Generate Password</h2>
+        <input type="text" id="password" readonly>
+        <br>
+        <label>Password Length:</label>
+        <input type="number" id="length" min="6" max="32" value="12">
+        <br>
+        <div class="checkbox-group">
+            <label><span>Uppercase</span> <input type="checkbox" id="uppercase" checked></label>
+            <label><span>Lowercase</span> <input type="checkbox" id="lowercase" checked></label>
+            <label><span>Numbers</span> <input type="checkbox" id="numbers" checked></label>
+            <label><span>Symbols</span> <input type="checkbox" id="symbols" checked></label>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-donate" onclick="generatePassword()">Generate</button>
+            <button class="btn-donate" onclick="copyPassword()">Copy</button>
+            <button class="btn-donate" onclick="clearSelection()">Clear</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Future Hackers. All rights reserved.</p>
+    </div>
+
+    <script>
+        function generatePassword() {
+            let length = document.getElementById("length").value;
+            let includeUppercase = document.getElementById("uppercase").checked;
+            let includeLowercase = document.getElementById("lowercase").checked;
+            let includeNumbers = document.getElementById("numbers").checked;
+            let includeSymbols = document.getElementById("symbols").checked;
+
+            const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+            const numberChars = "0123456789";
+            const symbolChars = "!@#$%^&*()_+[]{}|;:,.<>?";
+
+            let allChars = "";
+            let password = "";
+
+            if (includeUppercase) allChars += uppercaseChars;
+            if (includeLowercase) allChars += lowercaseChars;
+            if (includeNumbers) allChars += numberChars;
+            if (includeSymbols) allChars += symbolChars;
+
+            if (allChars === "") {
+                alert("Please select at least one character type!");
+                return;
+            }
+
+            for (let i = 0; i < length; i++) {
+                let randomIndex = Math.floor(Math.random() * allChars.length);
+                password += allChars[randomIndex];
+            }
+
+            document.getElementById("password").value = password;
+        }
+
+        function copyPassword() {
+            let passwordField = document.getElementById("password");
+            passwordField.select();
+            navigator.clipboard.writeText(passwordField.value);
+            alert("Password copied to clipboard!");
+        }
+
+        function clearSelection() {
+            document.getElementById("password").value = "";
+        }
+    </script>
+</body>
+</html>
